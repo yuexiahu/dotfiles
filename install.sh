@@ -14,4 +14,7 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins
 
 ln -sf $PWD/.zshrc ~/
 ln -sf $PWD/.tmux.conf ~/
+ln -sf $PWD/.clang-format ~/
 
+# tmux italic support
+tic res/screen-256color.terminfo

@@ -126,8 +126,8 @@ alias xo="xdg-open"
 alias ys="yay -Sy"
 alias tp="$HOME/Config/template/install.sh"
 alias vimf='vim $(fzf)'
-#alias tmux='env TERM=screen-256color tmux'
-alias ta="tmux attach"
+alias tmux='env TERM=screen-256color tmux'
+alias ta="tmux attach || tmux"
 
 alias cmakeg="[ -f CMakeLists.txt ] && ln -sf build/compile_commands ./compile_commands;\
     cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release"
