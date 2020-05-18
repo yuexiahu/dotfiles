@@ -18,3 +18,8 @@ ln -sf $PWD/.clang-format ~/
 
 # tmux italic support
 tic res/screen-256color.terminfo
+
+# konsole colorscheme
+if [ -d ~/.local/share/konsole ];then
+    cp res/Monokai.colorscheme ~/.local/share/konsole/
+fi
