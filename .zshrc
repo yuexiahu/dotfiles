@@ -68,56 +68,18 @@ ZSH_THEME="ys"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo extract colored-man-pages fzf z.lua)
+plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions)
 
 source $HOME/.profile
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
+#========================
+# environment
+#========================
 export EDITOR='nvim'
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-alias zshconfig="vim ~/.zshrc"
-alias ohmyzsh="vim ~/.oh-my-zsh"
-alias vi=nvim
-alias vim=nvim
-alias p4=proxychains4
-alias xo="xdg-open"
-alias ys="yay -Sy"
-alias tp="$HOME/Config/template/install.sh"
-alias vimf='vim $(fzf)'
-#alias tmux='env TERM=screen-256color tmux'
-alias ta="tmux attach"
-
-#cmake
-alias cmakeg="[ -f CMakeLists.txt ] && ln -sf build/compile_commands ./compile_commands;\
-    cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release"
-alias cmakegd="[ -f CMakeLists.txt ] && ln -sf build/compile_commands ./compile_commands;\
-    cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug"
-alias cmakeb="cmakeg && cmake --build build"
-alias cmaker="cmakeg && cmake --build build --target run"
-alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes"
+export MANPAGER='nvim -R +":set ft=man" -'
 
 export FZF_DEFAULT_COMMAND="fd --exclude={.git,.svn,.idea,.vscode,build} --type f"
 export FZF_DEFAULT_OPTS="--height 60% --layout=reverse"
@@ -134,7 +96,48 @@ else
     proxy_server="127.0.0.1"
 fi
 
-export ALL_PROXY=http://$proxy_server:7890
-export http_proxy=$ALL_PROXY
-export https_proxy=$ALL_PROXY
+#========================
+# functions
+#========================
+function proxy_enable() {
+    if [ ${1:-1} -eq 0 ]; then
+        unset ALL_PROXY
+        unset http_proxy
+        unset https_proxy
+        unset no_proxy
+    else
+        export ALL_PROXY=http://$proxy_server:7890
+        export http_proxy=$ALL_PROXY
+        export https_proxy=$ALL_PROXY
+        export no_proxy='127.0.0.1,192.6.6.6'
+    fi
+}
+proxy_enable
 
+#========================
+# alias
+#========================
+alias zshconfig="vim ~/.zshrc"
+alias ohmyzsh="vim ~/.oh-my-zsh"
+alias vi=nvim
+alias vim=nvim
+alias p4=proxychains4
+alias xo="xdg-open"
+alias ys="yay -Sy"
+alias tp="$HOME/Config/template/install.sh"
+alias vimf='vim $(fzf)'
+#alias tmux='env TERM=screen-256color tmux'
+alias ta="tmux attach"
+
+alias cmakeg="[ -f CMakeLists.txt ] && ln -sf build/compile_commands ./compile_commands;\
+    cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release"
+alias cmakegd="[ -f CMakeLists.txt ] && ln -sf build/compile_commands ./compile_commands;\
+    cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug"
+alias cmakeb="cmakeg && cmake --build build"
+alias cmaker="cmakeg && cmake --build build --target run"
+alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes"
+
+#========================
+# keybinding
+#========================
+bindkey '^ ' autosuggest-accept

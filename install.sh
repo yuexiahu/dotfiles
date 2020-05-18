@@ -7,7 +7,10 @@ if [ ! -d ~/.oh-my-zsh ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
-git clone https://github.com/skywind3000/z.lua ~/.oh-my-zsh/custom/plugins/z.lua
+ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
+
+git clone https://github.com/skywind3000/z.lua ${ZSH_CUSTOM}/plugins/z.lua
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
 
 ln -sf $PWD/.zshrc ~/
 ln -sf $PWD/.tmux.conf ~/
