@@ -126,7 +126,9 @@ alias xo="xdg-open"
 alias ys="yay -Sy"
 alias tp="$HOME/Config/template/install.sh"
 alias vimf='vim $(fzf)'
-alias tmux='env TERM=screen-256color tmux'
+if [ -z ${WSL_DISTRO_NAME} ];then
+    alias tmux='env TERM=screen-256color tmux'
+fi
 alias ta="tmux attach || tmux"
 alias zz='z -c' # 严格匹配当前路径的子路径
 alias zi='z -i' # 使用交互式选择模式
