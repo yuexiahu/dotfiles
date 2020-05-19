@@ -129,9 +129,9 @@ alias vimf='vim $(fzf)'
 alias tmux='env TERM=screen-256color tmux'
 alias ta="tmux attach || tmux"
 
-alias cmakeg="[ -f CMakeLists.txt ] && ln -sf build/compile_commands ./compile_commands;\
+alias cmakeg="[ -f CMakeLists.txt ] && ln -sf build/compile_commands.json ./;\
     cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release"
-alias cmakegd="[ -f CMakeLists.txt ] && ln -sf build/compile_commands ./compile_commands;\
+alias cmakegd="[ -f CMakeLists.txt ] && ln -sf build/compile_commands.json ./;\
     cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug"
 alias cmakeb="cmakeg && cmake --build build"
 alias cmaker="cmakeg && cmake --build build --target run"
