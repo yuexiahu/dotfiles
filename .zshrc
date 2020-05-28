@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$HOME/.dotfiles/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -86,14 +86,20 @@ export FZF_DEFAULT_OPTS="--height 60% --layout=reverse"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--preview \"head {} -n500\" --preview-window=right:60%"
 
-if cat /proc/version | grep microsoft &>/dev/null; then
-    proxy_server="$(cat /etc/resolv.conf | grep nameserver | cut -d' ' -f2)"
-    export wsl_version=2
+if [ -z "$WSLENV" ]; then
+    export proxy_server="127.0.0.1"
 else
-    if cat /proc/version | grep Microsoft &>/dev/null; then
+    if cat /proc/version | grep microsoft &>/dev/null; then
+        export wsl_version=2
+        proxy_server="$(cat /etc/resolv.conf | grep nameserver | cut -d' ' -f2)"
+    else
         export wsl_version=1
+        export proxy_server="127.0.0.1"
     fi
-    proxy_server="127.0.0.1"
+    export DISPLAY=$proxy_server:0
+    # hidpi in xfce
+    export GDK_SCALE=0.5
+    export GDK_DPI_SCALE=2
 fi
 
 #========================

@@ -21,5 +21,11 @@ tic res/screen-256color.terminfo
 
 # konsole colorscheme
 if [ -d ~/.local/share/konsole ];then
-    cp res/Monokai.colorscheme ~/.local/share/konsole/
+    cp -f res/Monokai.colorscheme ~/.local/share/konsole/
 fi
+
+# wsl config
+if [ ! -z "$WSLENV" ]; then
+    sudo cp -f res/wsl.conf /etc/
+fi
+
