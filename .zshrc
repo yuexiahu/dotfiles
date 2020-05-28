@@ -146,8 +146,9 @@ alias cmakeg="[ -f CMakeLists.txt ] && ln -sf build/compile_commands.json ./;\
     cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release"
 alias cmakegd="[ -f CMakeLists.txt ] && ln -sf build/compile_commands.json ./;\
     cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug"
-alias cmakeb="cmakeg && cmake --build build"
-alias cmaker="cmakeg && cmake --build build --target run"
+alias cmakeb="cmake --build build"
+alias cmaker="cmake --build build --target run"
+alias cmaket="cmakeb && env CTEST_OUTPUT_ON_FAILURE=1 cmake --build build --target test"
 alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes"
 
 #========================
