@@ -134,7 +134,9 @@ alias xo="xdg-open"
 alias ys="yay -Sy"
 alias tp="$HOME/Config/template/install.sh"
 alias vimf='vim $(fzf)'
-if [ -z ${WSL_DISTRO_NAME} ];then
+if [ -n "${WSLENV}" ]; then
+    alias drop_cache="sudo sh -c \"echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'\""
+else
     alias tmux='env TERM=screen-256color tmux'
 fi
 alias ta="tmux attach || tmux"
