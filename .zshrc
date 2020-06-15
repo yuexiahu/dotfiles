@@ -152,7 +152,7 @@ alias cmakegd="[ -f CMakeLists.txt ] && ln -sf build/compile_commands.json ./;\
     cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug"
 alias cmakeb="cmake --build build"
 alias cmaker="cmake --build build --target run"
-alias cmaket="cmakeb && env CTEST_OUTPUT_ON_FAILURE=1 cmake --build build --target test"
+alias cmaket="(cmakeb && cd build && env CTEST_OUTPUT_ON_FAILURE=1 ctest && ctest -T memcheck)"
 alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes"
 
 #========================
