@@ -8,7 +8,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="miloshadzic"
+#ZSH_THEME="miloshadzic"
+ZSH_THEME="af-magic"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -70,7 +71,6 @@ ZSH_THEME="miloshadzic"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions)
 
-source $HOME/.profile
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -86,7 +86,7 @@ export FZF_DEFAULT_OPTS="--height 60% --layout=reverse"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--preview \"head {} -n500\" --preview-window=right:60%"
 
-if [ -z "$WSLENV" ]; then
+if [ -z "$WSL_DISTRO_NAME" ]; then
     export proxy_server="127.0.0.1"
 else
     if cat /proc/version | grep microsoft &>/dev/null; then
@@ -97,11 +97,17 @@ else
         export proxy_server="127.0.0.1"
     fi
     export DISPLAY=$proxy_server:0
-    # hidpi in xfce
-    export GDK_SCALE=0.5
-    export GDK_DPI_SCALE=2
-    # auto scale for qt5
-    export QT_AUTO_SCREEN_SCALE_FACTOR=1
+    #export LIBGL_ALWAYS_INDIRECT=1
+    # hidpi
+    export GDK_SCALE=2
+    export QT_SCALE_FACTOR=2
+    export XCURSOR_SIZE=64
+
+    # im
+    export QT_IM_MODULE=fcitx
+    export GTK_IM_MODULE=fcitx
+    export XMODIFIERS=@im=fcitx
+    export DefaultIMModule=fcitx
 fi
 
 #========================
@@ -117,7 +123,7 @@ function proxy_enable() {
         export ALL_PROXY=http://$proxy_server:7890
         export http_proxy=$ALL_PROXY
         export https_proxy=$ALL_PROXY
-        export no_proxy='127.0.0.1,192.6.6.6'
+        export no_proxy="127.0.0.1,192.6.6.6,$proxy_server"
     fi
 }
 proxy_enable
@@ -154,6 +160,8 @@ alias cmakeb="cmake --build build"
 alias cmaker="cmake --build build --target run"
 alias cmaket="(cmakeb && cd build && env CTEST_OUTPUT_ON_FAILURE=1 ctest && ctest -T memcheck)"
 alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes"
+
+alias docui="docker run --rm -itv /var/run/docker.sock:/var/run/docker.sock skanehira/docui"
 
 #========================
 # keybinding
