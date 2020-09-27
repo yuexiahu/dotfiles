@@ -13,6 +13,7 @@ git clone https://github.com/skywind3000/z.lua ${ZSH_CUSTOM}/plugins/z.lua
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
 
 ln -sf $PWD/.zshrc ~/
+ln -sf $PWD/.zprofile ~/
 ln -sf $PWD/.tmux.conf ~/
 ln -sf $PWD/.clang-format ~/
 

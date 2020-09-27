@@ -1,6 +1,3 @@
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$HOME/.dotfiles/bin:$PATH
-
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -8,8 +5,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="miloshadzic"
-ZSH_THEME="af-magic"
+ZSH_THEME="miloshadzic"
+#ZSH_THEME="af-magic"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -28,7 +25,7 @@ ZSH_THEME="af-magic"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -84,31 +81,7 @@ export MANPAGER='nvim -R +":set ft=man" -'
 export FZF_DEFAULT_COMMAND="fd --exclude={.git,.svn,.idea,.vscode,build} --type f"
 export FZF_DEFAULT_OPTS="--height 60% --layout=reverse"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_CTRL_T_OPTS="--preview \"head {} -n500\" --preview-window=right:60%"
-
-if [ -z "$WSL_DISTRO_NAME" ]; then
-    export proxy_server="127.0.0.1"
-else
-    if cat /proc/version | grep microsoft &>/dev/null; then
-        export wsl_version=2
-        proxy_server="$(cat /etc/resolv.conf | grep nameserver | cut -d' ' -f2)"
-    else
-        export wsl_version=1
-        export proxy_server="127.0.0.1"
-    fi
-    export DISPLAY=$proxy_server:0
-    #export LIBGL_ALWAYS_INDIRECT=1
-    # hidpi
-    export GDK_SCALE=2
-    export QT_SCALE_FACTOR=2
-    export XCURSOR_SIZE=64
-
-    # im
-    export QT_IM_MODULE=fcitx
-    export GTK_IM_MODULE=fcitx
-    export XMODIFIERS=@im=fcitx
-    export DefaultIMModule=fcitx
-fi
+export FZF_CTRL_T_OPTS="--preview \"bat --style=numbers --color=always --line-range :500 {}\" --preview-window=right:60%"
 
 #========================
 # functions
@@ -142,6 +115,7 @@ alias tp="$HOME/Config/template/install.sh"
 alias vimf='vim $(fzf)'
 if [ -n "${WSLENV}" ]; then
     alias drop_cache="sudo sh -c \"echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'\""
+    alias explorer="/mnt/c/Windows/explorer.exe"
 else
     alias tmux='env TERM=screen-256color tmux'
 fi
@@ -162,6 +136,7 @@ alias cmaket="(cmakeb && cd build && env CTEST_OUTPUT_ON_FAILURE=1 ctest && ctes
 alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes"
 
 alias docui="docker run --rm -itv /var/run/docker.sock:/var/run/docker.sock skanehira/docui"
+alias dps='docker ps --format="table {{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"'
 
 #========================
 # keybinding
