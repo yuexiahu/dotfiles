@@ -16,6 +16,7 @@ ln -sf $PWD/.zshrc ~/
 ln -sf $PWD/.zprofile ~/
 ln -sf $PWD/.tmux.conf ~/
 ln -sf $PWD/.clang-format ~/
+ln -sf $PWD/.tigrc ~/
 
 # tmux italic support
 tic res/screen-256color.terminfo

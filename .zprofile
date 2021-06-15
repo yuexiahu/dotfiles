@@ -2,6 +2,7 @@ export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 export PATH="$HOME/scripts:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
 
 if [ -z "$WSL_DISTRO_NAME" ]; then
     export proxy_server="127.0.0.1"

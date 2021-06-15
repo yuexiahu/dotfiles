@@ -6,7 +6,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="miloshadzic"
-#ZSH_THEME="af-magic"
+# ZSH_THEME="itchy"
+# ZSH_THEME="af-magic"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -96,10 +97,63 @@ function proxy_enable() {
         export ALL_PROXY=http://$proxy_server:7890
         export http_proxy=$ALL_PROXY
         export https_proxy=$ALL_PROXY
-        export no_proxy="127.0.0.1,192.6.6.6,$proxy_server"
+        export no_proxy="localhost,127.0.0.1,192.6.6.6,$proxy_server"
     fi
 }
 proxy_enable
+
+function copy()
+{
+    # if the number of arguments equals 0
+    if [ $# -eq 0 ]
+    then
+        # if there are no arguments, save the folder you are currently in to the clipboard
+        pwd | xclip
+    else
+        # save the number of argument/path to `~/.numToCopy` file.
+        echo $# > ~/.numToCopy
+
+        # save all paths to clipboard
+        # source: https://stackoverflow.com/a/5265775/9157799
+        readlink -f "$@" | xclip
+    fi
+
+    # mark that you want to do a copy operation
+    echo "copy" > ~/.copyOrCut
+}
+
+function cut()
+{
+    # use the previous function to save the paths to clipboard
+    copy "$@"
+
+    # but mark it as a cut operation
+    echo "cut" > ~/.copyOrCut
+}
+
+function paste()
+{
+    # for every path
+    for number in {1..$(cat ~/.numToCopy)}
+    do
+        # get the nth path
+        pathToCopy="$(xclip -o | head -$number | tail -1)"
+
+        if [ -d "$pathToCopy" ] # If it's a directory
+        then
+            cp -r "$pathToCopy" .
+        else
+            cp "$pathToCopy" .
+        fi
+
+        # if it was marked as a cut operation
+        if [ $(cat ~/.copyOrCut) = "cut" ]
+        then
+            # delete the original file
+            rm -rf "$pathToCopy"
+        fi
+    done
+}
 
 #========================
 # alias
@@ -111,11 +165,10 @@ alias vim=nvim
 alias p4=proxychains4
 alias xo="xdg-open"
 alias ys="yay -Sy"
-alias tp="$HOME/Config/template/install.sh"
+alias tp="$HOME/scripts/tp/template/install.sh"
 alias vimf='vim $(fzf)'
 if [ -n "${WSLENV}" ]; then
     alias drop_cache="sudo sh -c \"echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'\""
-    alias explorer="/mnt/c/Windows/explorer.exe"
 else
     alias tmux='env TERM=screen-256color tmux'
 fi
