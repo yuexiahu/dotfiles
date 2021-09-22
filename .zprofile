@@ -17,9 +17,9 @@ else
     export DISPLAY=$proxy_server:0
     #export LIBGL_ALWAYS_INDIRECT=1
     # hidpi
-    export GDK_SCALE=2
-    export QT_SCALE_FACTOR=2
-    export XCURSOR_SIZE=64
+    # export GDK_SCALE=2
+    # export QT_SCALE_FACTOR=2
+    # export XCURSOR_SIZE=64
 
     # im
     export QT_IM_MODULE=fcitx
