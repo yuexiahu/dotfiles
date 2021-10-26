@@ -31,3 +31,5 @@ if [ ! -z "$WSLENV" ]; then
     sudo cp -f res/wsl.conf /etc/
 fi
 
+# tig diff-highlight
+cp -f res/diff-highlight ~/.local/bin/

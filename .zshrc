@@ -67,7 +67,7 @@ DISABLE_UPDATE_PROMPT="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions)
+plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions gitfast)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -155,6 +155,28 @@ function paste()
     done
 }
 
+function grbf()
+{
+    if [ $# -eq 0 ]; then
+        echo "Usage: grbf [branch]"
+        echo "git rebase from branch"
+        return 1
+    fi
+    git stash && git rebase $1 && git stash pop
+}
+
+function grbt()
+{
+    if [ $# -eq 0 ]; then
+        echo "Usage: grbt [branch]"
+        echo "git rebase to branch"
+        return 1
+    fi
+    now=$(git branch --show-current)
+    git stash && git checkout $1 && git rebase $now && git checkout - && git stash pop
+}
+
+
 #========================
 # alias
 #========================
@@ -167,6 +189,7 @@ alias xo="xdg-open"
 alias ys="yay -Sy"
 alias tp="$HOME/scripts/tp/template/install.sh"
 alias vimf='vim $(fzf)'
+alias ide='cd; ta'
 if [ -n "${WSLENV}" ]; then
     alias drop_cache="sudo sh -c \"echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'\""
 else
@@ -190,6 +213,8 @@ alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origin
 
 alias docui="docker run --rm -itv /var/run/docker.sock:/var/run/docker.sock skanehira/docui"
 alias dps='docker ps --format="table {{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"'
+
+alias ctagg='ctags -R -f .tags'
 
 #========================
 # keybinding
