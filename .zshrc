@@ -71,6 +71,8 @@ plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions gitfas
 
 source $ZSH/oh-my-zsh.sh
 
+[ -z "$ZPROFILE_LOADED" ] && source $HOME/.zprofile
+
 # User configuration
 
 #========================
@@ -97,7 +99,7 @@ function proxy_enable() {
         export ALL_PROXY=http://$proxy_server:7890
         export http_proxy=$ALL_PROXY
         export https_proxy=$ALL_PROXY
-        export no_proxy="localhost,127.0.0.1,192.6.6.6,$proxy_server"
+        export no_proxy="localhost,127.0.0.1,193.169.200.80,193.169.200.220,$proxy_server"
     fi
 }
 proxy_enable
@@ -215,6 +217,7 @@ alias docui="docker run --rm -itv /var/run/docker.sock:/var/run/docker.sock skan
 alias dps='docker ps --format="table {{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"'
 
 alias ctagg='ctags -R -f .tags'
+alias usbip=/usr/lib/linux-tools/5.4.0-77-generic/usbip
 
 #========================
 # keybinding

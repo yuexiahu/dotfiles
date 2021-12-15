@@ -27,3 +27,5 @@ else
     export XMODIFIERS=@im=fcitx
     export DefaultIMModule=fcitx
 fi
+
+export ZPROFILE_LOADED=1
