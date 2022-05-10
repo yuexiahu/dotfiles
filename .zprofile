@@ -9,7 +9,7 @@ if [ -z "$WSL_DISTRO_NAME" ]; then
 else
     if cat /proc/version | grep microsoft &>/dev/null; then
         export wsl_version=2
-        proxy_server="$(cat /etc/resolv.conf | grep nameserver | cut -d' ' -f2)"
+        export proxy_server="$(cat /etc/resolv.conf | grep nameserver | cut -d' ' -f2)"
     else
         export wsl_version=1
         export proxy_server="127.0.0.1"

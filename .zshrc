@@ -67,7 +67,7 @@ DISABLE_UPDATE_PROMPT="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions gitfast)
+plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions gitfast rsync)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -99,7 +99,7 @@ function proxy_enable() {
         export ALL_PROXY=http://$proxy_server:7890
         export http_proxy=$ALL_PROXY
         export https_proxy=$ALL_PROXY
-        export no_proxy="localhost,127.0.0.1,193.169.200.80,193.169.200.220,$proxy_server"
+        export no_proxy="localhost,127.0.0.1,193.169.200.80,193.169.200.220,193.169.200.250,$proxy_server"
     fi
 }
 proxy_enable
@@ -122,15 +122,6 @@ function copy()
 
     # mark that you want to do a copy operation
     echo "copy" > ~/.copyOrCut
-}
-
-function cut()
-{
-    # use the previous function to save the paths to clipboard
-    copy "$@"
-
-    # but mark it as a cut operation
-    echo "cut" > ~/.copyOrCut
 }
 
 function paste()
@@ -218,8 +209,16 @@ alias dps='docker ps --format="table {{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Nam
 
 alias ctagg='ctags -R -f .tags'
 alias usbip=/usr/lib/linux-tools/5.4.0-77-generic/usbip
+alias pip='DISPLAY= pip'
+alias pip3='DISPLAY= pip3'
 
 #========================
 # keybinding
 #========================
 bindkey '^ ' autosuggest-accept
+
+#========================
+# zsh option
+#========================
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
