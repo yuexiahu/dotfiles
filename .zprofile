@@ -1,7 +1,6 @@
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 export PATH="$HOME/scripts:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 
 if [ -z "$WSL_DISTRO_NAME" ]; then
@@ -14,7 +13,10 @@ else
         export wsl_version=1
         export proxy_server="127.0.0.1"
     fi
-    export DISPLAY=$proxy_server:0
+    # X11 TCP Server
+    # export DISPLAY=$proxy_server:0
+    # hyperV VSOCK
+    export DISPLAY=:0.0
     #export LIBGL_ALWAYS_INDIRECT=1
     # hidpi
     # export GDK_SCALE=2
@@ -27,5 +29,9 @@ else
     export XMODIFIERS=@im=fcitx
     export DefaultIMModule=fcitx
 fi
+
+export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
+source $HOME/.cargo/env
 
 export ZPROFILE_LOADED=1

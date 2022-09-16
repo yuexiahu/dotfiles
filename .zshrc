@@ -67,7 +67,7 @@ DISABLE_UPDATE_PROMPT="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions gitfast rsync)
+plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions gitfast rsync tig)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -79,9 +79,9 @@ source $ZSH/oh-my-zsh.sh
 # environment
 #========================
 export EDITOR='nvim'
-export MANPAGER='nvim -R +":set ft=man" -'
+#export MANPAGER='nvim -R +":set ft=man" -'
 
-export FZF_DEFAULT_COMMAND="fd --exclude={.git,.svn,.idea,.vscode,build} --type f"
+export FZF_DEFAULT_COMMAND="fd --exclude={.git,.svn,.idea,.vscode} --type f"
 export FZF_DEFAULT_OPTS="--height 60% --layout=reverse"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--preview \"bat --style=numbers --color=always --line-range :500 {}\" --preview-window=right:60%"
@@ -169,11 +169,24 @@ function grbt()
     git stash && git checkout $1 && git rebase $now && git checkout - && git stash pop
 }
 
+function trun()
+{
+    tmux new-session -d -s trun -c "$PWD" $@ &>/dev/null ||  tmux new-window -d -a -c "$PWD" -t trun $@
+}
+
+function wsl2vsock()
+{
+    mkdir -p /tmp/.X11-unix &>/dev/null
+    [ -f /tmp/.X11-unix/X0 ] ||
+        trun socat -b65536 UNIX-LISTEN:/tmp/.X11-unix/X0,fork,mode=777 SOCKET-CONNECT:40:0:x0000x70170000x02000000x00000000
+}
+
 
 #========================
 # alias
 #========================
 alias zshconfig="vim ~/.zshrc"
+alias sshconfig="vim ~/.ssh/config"
 alias ohmyzsh="vim ~/.oh-my-zsh"
 alias vi=nvim
 alias vim=nvim
@@ -185,6 +198,7 @@ alias vimf='vim $(fzf)'
 alias ide='cd; ta'
 if [ -n "${WSLENV}" ]; then
     alias drop_cache="sudo sh -c \"echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'\""
+    alias e='explorer.exe .'
 else
     alias tmux='env TERM=screen-256color tmux'
 fi
@@ -196,10 +210,10 @@ alias zb='z -b' # 快速回到父目录
 alias zh='z -I -t .' # fzf选择历史路径
 
 alias cmakeg="[ -f CMakeLists.txt ] && ln -sf build/compile_commands.json ./;\
-    cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release"
+    cmake -S. -Bbuild -G'Unix Makefiles' -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release"
 alias cmakegd="[ -f CMakeLists.txt ] && ln -sf build/compile_commands.json ./;\
-    cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug"
-alias cmakeb="cmake --build build"
+    cmake -S. -Bbuild -G'Unix Makefiles' -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug"
+alias cmakeb="cmake --build build -j6"
 alias cmaker="cmake --build build --target run"
 alias cmaket="(cmakeb && cd build && env CTEST_OUTPUT_ON_FAILURE=1 ctest && ctest -T memcheck)"
 alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes"

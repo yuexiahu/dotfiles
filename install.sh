@@ -17,6 +17,7 @@ ln -sf $PWD/.zprofile ~/
 ln -sf $PWD/.tmux.conf ~/
 ln -sf $PWD/.clang-format ~/
 ln -sf $PWD/.tigrc ~/
+ln -sf $PWD/.gdbinit ~/
 
 # tmux italic support
 tic res/screen-256color.terminfo
@@ -29,6 +30,7 @@ fi
 # wsl config
 if [ ! -z "$WSLENV" ]; then
     sudo cp -f res/wsl.conf /etc/
+    sudo ./shell/wsl2_clean_tmp.sh
 fi
 
 # tig diff-highlight
