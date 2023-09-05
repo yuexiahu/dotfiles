@@ -6,8 +6,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="miloshadzic"
-# ZSH_THEME="itchy"
-# ZSH_THEME="af-magic"
+#ZSH_THEME="jbergantine"
+#ZSH_THEME="af-magic"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -67,11 +67,11 @@ DISABLE_UPDATE_PROMPT="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions gitfast rsync tig)
+plugins=(git sudo extract colored-man-pages fzf z.lua zsh-autosuggestions gitfast rsync tig transfer ripgrep fd)
 
 source $ZSH/oh-my-zsh.sh
 
-[ -z "$ZPROFILE_LOADED" ] && source $HOME/.zprofile
+source $HOME/.zprofile
 
 # User configuration
 
@@ -79,7 +79,7 @@ source $ZSH/oh-my-zsh.sh
 # environment
 #========================
 export EDITOR='nvim'
-#export MANPAGER='nvim -R +":set ft=man" -'
+export MANPAGER="nvim +Man!"
 
 export FZF_DEFAULT_COMMAND="fd --exclude={.git,.svn,.idea,.vscode} --type f"
 export FZF_DEFAULT_OPTS="--height 60% --layout=reverse"
@@ -89,21 +89,6 @@ export FZF_CTRL_T_OPTS="--preview \"bat --style=numbers --color=always --line-ra
 #========================
 # functions
 #========================
-function proxy_enable() {
-    if [ ${1:-1} -eq 0 ]; then
-        unset ALL_PROXY
-        unset http_proxy
-        unset https_proxy
-        unset no_proxy
-    else
-        export ALL_PROXY=http://$proxy_server:7890
-        export http_proxy=$ALL_PROXY
-        export https_proxy=$ALL_PROXY
-        export no_proxy="localhost,127.0.0.1,193.169.200.80,193.169.200.220,193.169.200.250,$proxy_server"
-    fi
-}
-proxy_enable
-
 function copy()
 {
     # if the number of arguments equals 0
@@ -181,16 +166,55 @@ function wsl2vsock()
         trun socat -b65536 UNIX-LISTEN:/tmp/.X11-unix/X0,fork,mode=777 SOCKET-CONNECT:40:0:x0000x70170000x02000000x00000000
 }
 
+function sship() {
+    ssh -G $1 | awk '$1 == "hostname" { print $2 }'
+}
+
+function winscp() {
+    local host="$1"
+    if [ -z "$host" ]; then
+        echo "Usage: winscp [host]"
+        return 1
+    fi
+    /mnt/c/Program\ Files\ \(x86\)/WinSCP/WinSCP.exe "$host" /username=root /password=shuyilink
+}
+
+function sshp() {
+    eval last=\"\${$#}\"
+    if [ "$last" = "-w" ]; then
+        winscp "$1"
+        return
+    fi
+    TERM=xterm sshpass -p 'shuyilink' /usr/bin/ssh -o StrictHostKeyChecking=no -o ConnectTimeout=2 -o ConnectionAttempts=1 root@$1
+}
+
+function proxy_enable() {
+    if [ ${1:-1} -eq 0 ]; then
+        unset ALL_PROXY
+        unset http_proxy
+        unset https_proxy
+        unset no_proxy
+    else
+        export ALL_PROXY=http://$proxy_server:7890
+        export http_proxy=$ALL_PROXY
+        export https_proxy=$ALL_PROXY
+        export no_proxy="localhost,127.0.0.1,shuyilink.com,192.168.129.220,193.169.200.200,193.169.203.10,$proxy_server"
+    fi
+}
+proxy_enable
 
 #========================
 # alias
 #========================
-alias zshconfig="vim ~/.zshrc"
-alias sshconfig="vim ~/.ssh/config"
-alias ohmyzsh="vim ~/.oh-my-zsh"
+alias zshconfig="nvim ~/.zshrc"
+alias sshconfig="nvim ~/.ssh/config"
+alias ohmyzsh="nvim ~/.oh-my-zsh"
+alias ssh="TERM=xterm ssh"
 alias vi=nvim
 alias vim=nvim
-alias p4=proxychains4
+alias vimm='nvim -u ~/.vim/init_basic.vim'
+alias gvim='neovide.exe --wsl --multigrid --notabs'
+alias p4="$HOME/.dotfiles/shell/p4.sh"
 alias xo="xdg-open"
 alias ys="yay -Sy"
 alias tp="$HOME/scripts/tp/template/install.sh"
@@ -199,8 +223,9 @@ alias ide='cd; ta'
 if [ -n "${WSLENV}" ]; then
     alias drop_cache="sudo sh -c \"echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'\""
     alias e='explorer.exe .'
+    alias wxo="wslview"
 else
-    alias tmux='env TERM=screen-256color tmux'
+    # alias tmux='env TERM=screen-256color tmux'
 fi
 alias ta="tmux attach || tmux"
 alias zz='z -c' # 严格匹配当前路径的子路径
@@ -217,14 +242,13 @@ alias cmakeb="cmake --build build -j6"
 alias cmaker="cmake --build build --target run"
 alias cmaket="(cmakeb && cd build && env CTEST_OUTPUT_ON_FAILURE=1 ctest && ctest -T memcheck)"
 alias leakcheck="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes"
+alias lg=lazygit
 
 alias docui="docker run --rm -itv /var/run/docker.sock:/var/run/docker.sock skanehira/docui"
 alias dps='docker ps --format="table {{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"'
 
 alias ctagg='ctags -R -f .tags'
 alias usbip=/usr/lib/linux-tools/5.4.0-77-generic/usbip
-alias pip='DISPLAY= pip'
-alias pip3='DISPLAY= pip3'
 
 #========================
 # keybinding

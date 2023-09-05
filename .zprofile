@@ -1,7 +1,11 @@
+if [ -n "$ZPROFILE_LOADED" ]; then
+    return
+fi
+
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
-export PATH="$HOME/.dotfiles/bin:$PATH"
 export PATH="$HOME/scripts:$PATH"
-export PATH="/usr/local/go/bin:$PATH"
+export PATH="$HOME/toolkit/qtcreator/bin:$PATH"
+export PATH="/usr/local/go/bin:$HOME/go/bin:$PATH"
 
 if [ -z "$WSL_DISTRO_NAME" ]; then
     export proxy_server="127.0.0.1"
@@ -34,4 +38,14 @@ export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
 export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
 source $HOME/.cargo/env
 
+# export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin"
+# export HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
+# export HOMEBREW_CELLAR=/home/linuxbrew/.linuxbrew/Cellar
+# export HOMEBREW_REPOSITORY=/home/linuxbrew/.linuxbrew/Homebrew
+
+export GOPROXY=https://goproxy.cn
+export ALL_PROXY=http://$proxy_server:7890
+export http_proxy=$ALL_PROXY
+export https_proxy=$ALL_PROXY
+export no_proxy="localhost,127.0.0.1,192.168.129.220,193.169.200.200,$proxy_server"
 export ZPROFILE_LOADED=1
